@@ -58,6 +58,7 @@ def main():
 
         raise SystemExit
     elif ret.action == 'upgrade':
+
         create_dir()
         update_database()
         check_update(mark=False)

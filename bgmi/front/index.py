@@ -8,38 +8,18 @@ from bgmi.config import SAVE_PATH, FRONT_STATIC_PATH
 from bgmi.front.base import BaseHandler, COVER_URL
 from bgmi.lib.models import STATUS_DELETED, STATUS_UPDATING, STATUS_END, Followed
 from bgmi.utils import normalize_path, logger
+import pymongo
 
 
 def get_player(bangumi_name):
-    episode_list = {}
-    # new path
-    if os.path.exists(os.path.join(SAVE_PATH, normalize_path(bangumi_name))):
-        bangumi_name = normalize_path(bangumi_name)
-    bangumi_path = os.path.join(SAVE_PATH, bangumi_name)
-    path_walk = os.walk(bangumi_path)
-
-    logger.debug('os.walk(bangumi_path) => {}'.format(pformat(path_walk)))
-    for root, _, files in path_walk:
-        _ = root.replace(bangumi_path, '').split(os.path.sep)
-        base_path = root.replace(SAVE_PATH, '')
-        if len(_) >= 2:
-            episode_path = root.replace(os.path.join(SAVE_PATH, bangumi_name), '')
-            if episode_path.split(os.path.sep)[1].isdigit():
-                episode = int(episode_path.split(os.path.sep)[1])
-            else:
-                continue
-        else:
-            episode = -1
-
-        for bangumi in files:
-            if any([bangumi.lower().endswith(x) for x in ['.mp4', '.mkv', '.webm']]):
-                video_file_path = os.path.join(base_path, bangumi)
-                video_file_path = os.path.join(os.path.dirname(video_file_path), os.path.basename(video_file_path))
-                video_file_path = video_file_path.replace(os.path.sep, '/')
-                episode_list[episode] = {'path': video_file_path}
-                break
-
-    return episode_list
+    mongoClient = pymongo.MongoClient()
+    mongodb = mongoClient.get_database('bgmi')
+    mongo_collection = mongodb.get_collection('bangumi')
+    r = mongo_collection.find_one({'_id': bangumi_name})
+    if r:
+        return r['player']
+    else:
+        return {}
 
 
 class IndexHandler(BaseHandler):
