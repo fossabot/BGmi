@@ -82,7 +82,7 @@ class BaseWebsite(object):
                                              Subtitle.get_subtitle_by_id(bangumi['subtitle_group'].split(', '))]
         return weekly_list
 
-    def bangumi_calendar(self, force_update=False, save=True, cover=None):
+    def bangumi_calendar(self, force_update=False, save=True):
         """
 
         :param force_update:
@@ -107,20 +107,6 @@ class BaseWebsite(object):
         if not weekly_list:
             print_warning('Warning: no bangumi schedule, fetching ...')
             weekly_list = self.fetch(save=save)
-
-        if cover is not None:
-            # download cover to local
-            cover_to_be_download = cover
-            for daily_bangumi in weekly_list.values():
-                for bangumi in daily_bangumi:
-                    _, file_path = convert_cover_url_to_path(bangumi['cover'])
-
-                    if not (os.path.exists(file_path) and imghdr.what(file_path)):
-                        cover_to_be_download.append(bangumi['cover'])
-
-            if cover_to_be_download:
-                print_info('Updating cover ...')
-                download_cover(cover_to_be_download)
 
         return weekly_list
 

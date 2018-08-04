@@ -23,7 +23,7 @@ from bgmi.lib.models import Bangumi, Followed, Filter, Subtitle, STATUS_UPDATED,
 from bgmi.script import ScriptRunner
 from bgmi.utils import (print_info, print_warning, print_success, print_error,
                         RED, GREEN, YELLOW, COLOR_END, get_terminal_col, logger)
-
+import pymongo
 
 def source_wrapper(ret):
     result = source(data_source=ret.source)
@@ -86,13 +86,11 @@ def cal_wrapper(ret):
     save = not ret.no_save
 
     runner = ScriptRunner()
-    if ret.download_cover:
-        cover = runner.get_download_cover()
-    else:
-        cover = None
 
     weekly_list = website.bangumi_calendar(
-        force_update=force_update, save=save, cover=cover)
+        force_update=force_update,
+        save=save,
+    )
 
     patch_list = runner.get_models_dict()
     for i in patch_list:

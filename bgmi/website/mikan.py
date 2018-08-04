@@ -9,6 +9,7 @@ from multiprocessing.pool import ThreadPool
 
 import bs4
 import requests
+from bgmi.utils import normalize_path
 from bs4 import BeautifulSoup
 from six import string_types
 
@@ -277,7 +278,8 @@ class Mikanani(BaseWebsite):
         for i, bangumi in enumerate(bangumi_list):
             bangumi.update(r[i])
             bangumi_result.append(bangumi)
-
+        for bangumi in bangumi_result:
+            bangumi['name'] = normalize_path(bangumi['name'])
         [subtitle_result.extend(x['subtitle_groups']) for x in bangumi_result]
 
         f = lambda x, y: x if y in x else x + [y]
