@@ -309,8 +309,6 @@ def update(name, download=None, not_ignore=False):
             obj.status = STATUS_FOLLOWED
             obj.save()
 
-    print_info('updating bangumi data ...')
-    website.fetch(save=True, group_by_weekday=False)
     print_info('updating subscriptions ...')
     download_queue = []
 
@@ -372,6 +370,18 @@ def update(name, download=None, not_ignore=False):
                     if epi['episode'] == i:
                         download_queue.append(epi)
                         break
+
+    print(download_queue)
+    for item in download_queue:
+        r = pymongo.MongoClient().get_database('bgmine').get_collection('bangumi') \
+            .find_one({'_id': item['name']})
+        updater = {'$set': {
+            'player.{}.torrent'.format(item['episode']): item['download']
+        }}
+        pymongo.MongoClient().get_database('bgmine').get_collection('bangumi') \
+            .update_one({'_id': item['name']},
+                        updater,
+                        upsert=True)
 
     if download is not None:
         result['data']['downloaded'] = download_queue
