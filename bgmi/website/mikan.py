@@ -217,7 +217,8 @@ class Mikanani(BaseWebsite):
                 title = tr.find('a', class_='magnet-link-wrap').text
                 time_string = tr.find_all('td')[2].string
                 result.append({
-                    'download': server_root[:-1] + tr.find_all('td')[-1].find('a', ).attrs.get('href', ''),
+                    # 'download': server_root[:-1] + tr.find_all('td')[-1].find('a', ).attrs.get('href', ''), # .torrent
+                    'download': tr.find('a', class_='magnet-link').attrs.get('data-clipboard-text', ''),  # magnet:
                     'subtitle_group': str(subtitle_id),
                     'title': title,
                     'episode': self.parse_episode(title),

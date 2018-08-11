@@ -116,7 +116,7 @@ class Followed(NeoDB):
     @classmethod
     def get_all_followed(cls, status=STATUS_DELETED, bangumi_status=STATUS_UPDATING):
         join_cond = (Bangumi.name == cls.bangumi_name)
-        d = cls.select(Bangumi.name, Bangumi.update_time, Bangumi.cover, cls, ) \
+        d = cls.select(Bangumi.name, Bangumi.keyword, Bangumi.update_time, Bangumi.cover, cls, ) \
             .join(Bangumi, peewee.JOIN['LEFT_OUTER'], on=join_cond) \
             .where((cls.status != status) & (Bangumi.status == bangumi_status)) \
             .order_by(cls.updated_time.desc()) \
