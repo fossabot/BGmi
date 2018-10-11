@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FTrim21%2FBGmi.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FTrim21%2FBGmi?ref=badge_shield)
+
 BGmi
 ====
 BGmi is a cli tool for subscribed bangumi.
@@ -685,3 +687,6 @@ SOFTWARE.
    :target: https://pypi.python.org/pypi/bgmi
 
 
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FTrim21%2FBGmi.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FTrim21%2FBGmi?ref=badge_large)
